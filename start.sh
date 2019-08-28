@@ -7,7 +7,7 @@ if [ $status -ne 0 ]; then
   echo "Failed to start MariaDB: $status"
   exit $status
 fi
-if [ ! -f /mnt/mysql/webadm ]; then
+if [ ! -f /var/lib/mysql/webadm ]; then
   sed -i 's/mysql -u root -p -e "$SQL"/mysql -u root -e "$SQL"/' /opt/webadm/doc/scripts/create_mysqldb
   /opt/webadm/doc/scripts/create_mysqldb
 fi
