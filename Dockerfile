@@ -20,11 +20,9 @@ RUN wget https://www.rcdevs.com/repos/debian/rcdevs-release_1.0.0-0_all.deb \
 	&& rm -rf /var/lib/apt/lists/* 
 
 RUN mkdir -p /mnt/slapd && mkdir -p /mnt/webadm && mkdir -p /mnt/radiusd \
-	&& mv /var/lib/mysql /mnt/ \
 	&& mv /opt/slapd/conf /opt/slapd/data /mnt/slapd/ \
 	&& mv /opt/webadm/pki /mnt/webadm/ \
 	&& mv /opt/radiusd/conf /mnt/radiusd/ \ 
-	&& ln -s /mnt/mysql /var/lib/ \
 	&& ln -s /mnt/slapd/* /opt/slapd/ \
 	&& ln -s /mnt/webadm/* /opt/webadm/ \
 	&& ln -s /mnt/radiusd/* /opt/radiusd/
