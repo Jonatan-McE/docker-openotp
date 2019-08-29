@@ -1,18 +1,23 @@
 #!/bin/bash
 
 # Start MySQL (MariaDB) service
+if [ ! "$(ls -A /var/lib/mysql/)" ]; then
+  cp -r --preserve=all /var/lib/.mysql/* /var/lib/mysql/
+fi
 /etc/init.d/mysql start
 status=$?
 if [ $status -ne 0 ]; then
   echo "Failed to start MariaDB: $status"
   exit $status
 fi
-if [ ! -f /var/lib/mysql/webadm ]; then
-  sed -i 's/mysql -u root -p -e "$SQL"/mysql -u root -e "$SQL"/' /opt/webadm/doc/scripts/create_mysqldb
-  /opt/webadm/doc/scripts/create_mysqldb
-fi
 
 # Start RCDEVS ldap service
+if [ ! "$(ls -A /opt/slapd/conf/)" ]; then
+  cp -r --preserve=all /opt/slapd/.conf/* /opt/slapd/conf/
+fi
+if [ ! "$(ls -A /opt/slapd/data/)" ]; then
+  cp -r --preserve=all /opt/slapd/.data/* /opt/slapd/data/
+fi
 if [ ! -f /opt/slapd/temp/.setup ]; then
   /opt/slapd/bin/setup silent
 else
@@ -25,6 +30,16 @@ else
 fi
 
 # Start RCDEVS webadm service
+if [ ! "$(ls -A /opt/webadm/conf/)" ]; then
+  cp -r --preserve=all /opt/webadm/.conf/* /opt/webadm/conf/
+fi
+if [ ! "$(ls -A /opt/webadm/pki/)" ]; then
+  cp -r --preserve=all /opt/webadm/.pki/* /opt/webadm/pki/
+fi
+if [ ! -f /var/lib/mysql/webadm ]; then
+  sed -i 's/mysql -u root -p -e "$SQL"/mysql -u root -e "$SQL"/' /opt/webadm/doc/scripts/create_mysqldb
+  /opt/webadm/doc/scripts/create_mysqldb
+fi
 if [ ! -f /opt/webadm/temp/.setup ]; then
   /opt/webadm/bin/setup silent
 fi
@@ -36,6 +51,9 @@ if [ $status -ne 0 ]; then
 fi
 
 # Start RCDEVS radius service
+if [ ! "$(ls -A /opt/radiusd/conf/)" ]; then
+  cp -r --preserve=all /opt/radiusd/.conf/* /opt/radiusd/conf/
+fi
 if [ ! -f /opt/radiusd/temp/.setup ]; then
   echo "-- Waiting for WebADM setup to complete before continuing --"
   while [[ ! `wget --no-check-certificate --no-cookies --timeout=5 --delete -S https://127.0.0.1/cacert/ 2>&1 | grep 'HTTP/1.1 200'` ]]; do
