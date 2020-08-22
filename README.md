@@ -1,7 +1,6 @@
-# container-openotp
+# WebADM-OpenOTP
 
-#### Example run command
-
+#### Simple Docker run command
 ```
 docker run -d \  
 -p 80:80 \  
@@ -12,15 +11,15 @@ docker run -d \
 --name openotp jonatanmc/openotp
 ```
 
-#### The following paths should be persisted
+## The following paths should be persisted
+* /var/lib/mysql 
+* /opt/slapd/conf
+* /opt/slapd/data
+* /opt/radiusd/conf
+* /opt/webadm/conf
+* /opt/webadm/pki
 
-- /var/lib/mysql 
-- /opt/slapd/conf
-- /opt/slapd/data
-- /opt/radiusd/conf
-- /opt/webadm/conf
-- /opt/webadm/pki
-
+#### Simple Docker run command with persisted volumes
 ```
 docker run -d \  
 -p 80:80 \  
@@ -37,29 +36,33 @@ docker run -d \
 --name openotp jonatanmc/openotp
 ```
 
-#### Setup at first start
+## First start
 
-1. Login to the webadm web ui https://<ip or url>/admin
-  - User: cn=admin,o=root
-  - Pass: password
+1. Login to the webadm web ui `https://<ip or url>/admin`  
+*
+  * User: cn=admin,o=root
+  * Pass: password
 
-2. Once logged in, Complete webADM installation by using the supplyed buttons to create any missing settings
-  - Database tables
-  - WebADM proxy user
-  - Default LDAP objects
+2. Once logged in, Complete webADM installation by using the supplyed buttons to create any missing settings  
+*
+  * Database tables
+  * WebADM proxy user
+  * Default LDAP objects
 
 3. After WebADM installation is complete. Logout and then back in again. There should be a pending SSL certificate 
-requests from 127.0.0.1 that you need to acept within 5 min. This is for the radiusd service running localy.
-  - User: admin
-  - Pass: password
+requests from 127.0.0.1 that you need to acept within 5 min. This is for the radiusd service running localy  
+*
+  * User: admin
+  * Pass: password
 
-4. Configure the applications you want to use
-  - MFA Authentication server (OpenOTP)
-  - SMS Hub server
-  - SSH Public Key Server
-  - User Self-Service Desk
+4. Configure the applications you want to use  
+*
+  * MFA Authentication server (OpenOTP)
+  * SMS Hub server
+  * SSH Public Key Server
+  * User Self-Service Desk
 
-#### New license requirement for WebADM 2.0
+## New license requirement for WebADM 2.0
 
 As of webADM 2.0, even freeware installations require a licens file to start. You will need to ether retrive the the custom url 
 that is created at startup and that can be seen when you output the container logs
@@ -82,6 +85,3 @@ server only! Freeware licenses also requires an Internet connection, yet it can 
 offline for a few weeks (without interacting with RCDevs license services).
 You can get a WebADM freeware license at https://cloud.rcdevs.com/freeware-license/.
 Note that all the previously available freeware features are maintained in WebADM v2.*
-
-- Update 2020-04-04 (1.7.10)
-- Update 2020-08-21 (2.0.2)
