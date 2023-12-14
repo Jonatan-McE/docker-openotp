@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+
+  openotp:
+    image: openotp
+    build: ./build
+    container_name: openotp
+    hostname: openotp
+    restart: unless-stopped
+    environment:
+      - WEBADM_PROXYUSER_PASS=abcdef123456
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - slapd_conf:/opt/slapd/conf
+      - slapd_data:/opt/slapd/data
+      - webadm_conf:/opt/webadm/conf
+      - webadm_pki:/opt/webadm/pki
+      - webadm_temp:/opt/webadm/temp
+      - radiusd_conf:/opt/radiusd/conf
+#      - ./license.key:/opt/webadm/conf/license.key
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+      - 8443:8443
+      - 1812:1812/udp
+      - 1813:1813/udp
+    networks:
+      dockernetwork:
+
+volumes:
+  mariadb_data:
+  slapd_conf:
+  slapd_data:
+  webadm_conf:
+  webadm_pki:
+  webadm_temp:
+  radiusd_conf:
+
+networks:
+  dockernetwork:
+    driver: bridge
+    name: bridge_custom
